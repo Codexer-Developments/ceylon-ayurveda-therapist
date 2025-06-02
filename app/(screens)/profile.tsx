@@ -103,14 +103,14 @@ export default function ProfileScreen() {
           {/* Professional Badge */}
           <View
             style={{
-              backgroundColor: "#6B7280",
+              backgroundColor: "#7A4530",
               paddingHorizontal: 16,
               paddingVertical: 6,
               borderRadius: 20,
               marginBottom: 16,
             }}
           >
-            <Text style={{ color: "white", fontSize: 12, fontWeight: "500" }}>
+            <Text style={{ color: "white", fontSize: 12, fontWeight: "700" }}>
               Licensed Therapist
             </Text>
           </View>
