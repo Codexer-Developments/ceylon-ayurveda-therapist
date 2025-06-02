@@ -1,8 +1,7 @@
-import { Feather, FontAwesome } from "@expo/vector-icons"
-import { useRouter } from "expo-router"
-import { useState } from "react"
+import { FontAwesome } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
-  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -12,22 +11,24 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from "react-native"
-import { SafeAreaProvider } from "react-native-safe-area-context"
+} from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-export default function LoginScreen() {
-  const router = useRouter()
-
-  // Basic UI state only
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [emailFocus, setEmailFocus] = useState(false)
-  const [passwordFocus, setPasswordFocus] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+export default function ForgotPasswordScreen() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [emailFocus, setEmailFocus] = useState(false);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 40, backgroundColor: "#FEF7ED" }}>
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: 24,
+          paddingTop: 40,
+          backgroundColor: "#FEF7ED",
+        }}
+      >
         {/* Background decorative patches - matching the exact image */}
 
         {/* Top right large patch */}
@@ -76,24 +77,34 @@ export default function LoginScreen() {
         />
 
         <SafeAreaProvider>
-          <SafeAreaView style={{ flex: 1, justifyContent: "center", paddingHorizontal: 24, paddingTop: 40 }}>
+          <SafeAreaView
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              paddingHorizontal: 24,
+              paddingTop: 40,
+            }}
+          >
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={{ flex: 1 }}
               keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
             >
               <View style={{ flex: 1, justifyContent: "center" }}>
-                {/* Logo */}
-                <View style={{ alignItems: "center", marginBottom: 1 }}>
-                  <Image
-                    source={require("../../assets/images/logo.png")}
+                {/* Lock Icon */}
+                <View style={{ alignItems: "center", marginBottom: 32 }}>
+                  <View
                     style={{
-                      width: 250,
-                      height: 100,
-                      marginBottom: 16,
+                      width: 60,
+                      height: 60,
+                      backgroundColor: "#9A563A",
+                      borderRadius: 20,
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    resizeMode="contain"
-                  />
+                  >
+                    <FontAwesome name="lock" size={32} color="white" />
+                  </View>
                 </View>
 
                 {/* Header text */}
@@ -102,22 +113,24 @@ export default function LoginScreen() {
                     fontSize: 24,
                     fontWeight: "bold",
                     color: "black",
-                    marginTop: -10,
                     textAlign: "center",
+                    marginBottom: 16,
                   }}
                 >
-                  Therapist Login
+                  Forgot Your Password?
                 </Text>
                 <Text
                   style={{
                     fontSize: 14,
                     color: "#6B7280",
-                    marginBottom: 32,
-                    marginTop: 5,
+                    marginBottom: 40,
                     textAlign: "center",
+                    lineHeight: 20,
+                    paddingHorizontal: 20,
                   }}
                 >
-                  Welcome back! Please login to your therapist account
+                  Please enter your email address account to send the{"\n"}OTP
+                  verification to reset your password
                 </Text>
 
                 {/* Email Input */}
@@ -126,7 +139,7 @@ export default function LoginScreen() {
                     flexDirection: "row",
                     alignItems: "center",
                     backgroundColor: "#FFFFFF",
-                    marginBottom: 16,
+                    marginBottom: 24,
                     borderRadius: 14,
                     padding: 16,
                     paddingVertical: 20,
@@ -146,7 +159,7 @@ export default function LoginScreen() {
                     style={{ marginRight: 12 }}
                   />
                   <TextInput
-                    placeholder="Therapist Email"
+                    placeholder="Email"
                     keyboardType="email-address"
                     style={{
                       flex: 1,
@@ -165,79 +178,29 @@ export default function LoginScreen() {
                   />
                 </View>
 
-                {/* Password Input */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    backgroundColor: "#FFFFFF",
-                    marginBottom: 16,
-                    borderRadius: 14,
-                    padding: 16,
-                    paddingVertical: 20,
-                    borderWidth: 1,
-                    borderColor: passwordFocus ? "#9A563A" : "#E5E7EB",
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 2,
-                    elevation: 1,
-                  }}
+                {/* Need Help Link */}
+                <TouchableOpacity
+                  style={{ alignItems: "center", marginBottom: 40 }}
                 >
-                  <FontAwesome
-                    name="key"
-                    size={18}
-                    color={passwordFocus ? "#9A563A" : "#9CA3AF"}
-                    style={{ marginRight: 12 }}
-                  />
-                  <TextInput
-                    placeholder="Password"
-                    secureTextEntry={!showPassword}
-                    style={{
-                      flex: 1,
-                      color: "black",
-                      fontSize: 14,
-                      height: Platform.OS === "ios" ? 24 : "auto",
-                      paddingVertical: Platform.OS === "ios" ? 0 : 2,
-                    }}
-                    onFocus={() => setPasswordFocus(true)}
-                    onBlur={() => setPasswordFocus(false)}
-                    placeholderTextColor="#9CA3AF"
-                    value={password}
-                    onChangeText={setPassword}
-                  />
-                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <Feather
-                      name={showPassword ? "eye" : "eye-off"}
-                      size={20}
-                      color={showPassword ? "#9A563A" : "#9CA3AF"}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                {/* Forgot Password */}
-                <TouchableOpacity onPress={() => router.push("/(auth)/forgot-password")}>
                   <Text
                     style={{
-                      textAlign: "right",
-                      marginBottom: 32,
-                      paddingVertical: 4,
                       color: "#9A563A",
-                      fontWeight: "500",
                       fontSize: 13,
+                      fontWeight: "500",
                     }}
                   >
-                    Forgot Password?
+                    Need Help?
                   </Text>
                 </TouchableOpacity>
 
-                {/* Login Button */}
+                {/* Continue Button */}
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#9A563A",
                     paddingVertical: 18,
                     alignItems: "center",
                     borderRadius: 14,
+                    marginBottom: 16,
                     shadowColor: "#9A563A",
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.3,
@@ -252,37 +215,30 @@ export default function LoginScreen() {
                       fontWeight: "600",
                     }}
                   >
-                    Login to Practice
+                    Continue
                   </Text>
                 </TouchableOpacity>
 
-                {/* Register Link */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 24,
-                  }}
+                {/* Back Link */}
+                <TouchableOpacity
+                  style={{ alignItems: "center" }}
+                  onPress={() => router.back()}
                 >
-                  <Text style={{ color: "#9CA3AF", fontSize: 16 }}>Don't have an account? </Text>
-                  <TouchableOpacity onPress={() => router.push("/(auth)/register")}>
-                    <Text
-                      style={{
-                        color: "#9A563A",
-                        fontWeight: "600",
-                        fontSize: 13,
-                      }}
-                    >
-                      Join Our Practice
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                  <Text
+                    style={{
+                      color: "#6B7280",
+                      fontSize: 13,
+                      fontWeight: "500",
+                    }}
+                  >
+                    Back
+                  </Text>
+                </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
           </SafeAreaView>
         </SafeAreaProvider>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }

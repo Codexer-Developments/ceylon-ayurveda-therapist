@@ -113,7 +113,7 @@ export default function RegisterScreen() {
                     textAlign: "center",
                   }}
                 >
-                  Registration Account
+                  Therapist Registration
                 </Text>
                 <Text
                   style={{
@@ -123,7 +123,7 @@ export default function RegisterScreen() {
                     textAlign: "center",
                   }}
                 >
-                  Let's create your account first
+                  Join our network of professional therapists
                 </Text>
 
                 {/* Full Name Input */}
@@ -156,7 +156,7 @@ export default function RegisterScreen() {
                     style={{
                       flex: 1,
                       color: "black",
-                      fontSize: 16,
+                      fontSize: 14,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
                     }}
@@ -201,7 +201,7 @@ export default function RegisterScreen() {
                     style={{
                       flex: 1,
                       color: "black",
-                      fontSize: 16,
+                      fontSize: 14,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
                     }}
@@ -211,6 +211,50 @@ export default function RegisterScreen() {
                     value={email}
                     onChangeText={setEmail}
                     autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                </View>
+
+                {/* Specialization Input */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFFFFF",
+                    marginBottom: 16,
+                    borderRadius: 14,
+                    padding: 16,
+                    paddingVertical: 20,
+                    borderWidth: 1,
+                    borderColor: specializationFocus ? "#9A563A" : "#E5E7EB",
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 2,
+                    elevation: 1,
+                  }}
+                >
+                  <FontAwesome
+                    name="stethoscope"
+                    size={18}
+                    color={specializationFocus ? "#9A563A" : "#9CA3AF"}
+                    style={{ marginRight: 12 }}
+                  />
+                  <TextInput
+                    placeholder="Specialization (e.g., Clinical Psychology)"
+                    style={{
+                      flex: 1,
+                      color: "black",
+                      fontSize: 14,
+                      height: Platform.OS === "ios" ? 24 : "auto",
+                      paddingVertical: Platform.OS === "ios" ? 0 : 2,
+                    }}
+                    onFocus={() => setSpecializationFocus(true)}
+                    onBlur={() => setSpecializationFocus(false)}
+                    placeholderTextColor="#9CA3AF"
+                    value={specialization}
+                    onChangeText={setSpecialization}
+                    autoCapitalize="words"
                     autoCorrect={false}
                   />
                 </View>
@@ -246,7 +290,7 @@ export default function RegisterScreen() {
                     style={{
                       flex: 1,
                       color: "black",
-                      fontSize: 16,
+                      fontSize: 14,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
                     }}
@@ -296,7 +340,7 @@ export default function RegisterScreen() {
                     style={{
                       flex: 1,
                       color: "black",
-                      fontSize: 16,
+                      fontSize: 14,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
                     }}
@@ -332,11 +376,11 @@ export default function RegisterScreen() {
                   <Text
                     style={{
                       color: "white",
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: "600",
                     }}
                   >
-                    Create Account
+                    Join Our Practice
                   </Text>
                 </TouchableOpacity>
 
@@ -349,7 +393,7 @@ export default function RegisterScreen() {
                     marginTop: 24,
                   }}
                 >
-                  <Text style={{ color: "#9CA3AF", fontSize: 13 }}>Already have an account? </Text>
+                  <Text style={{ color: "#9CA3AF", fontSize: 13 }}>Already a therapist? </Text>
                   <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
                     <Text
                       style={{
@@ -358,7 +402,7 @@ export default function RegisterScreen() {
                         fontSize: 13,
                       }}
                     >
-                      Login Account
+                      Login to Practice
                     </Text>
                   </TouchableOpacity>
                 </View>
