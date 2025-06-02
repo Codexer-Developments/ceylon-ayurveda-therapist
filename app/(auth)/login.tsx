@@ -25,6 +25,11 @@ export default function LoginScreen() {
   const [passwordFocus, setPasswordFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
+  const handleLogin = () => {
+    // For now, just navigate to the main app
+    router.replace("/(screens)/appointments")
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 40, backgroundColor: "#FEF7ED" }}>
@@ -233,6 +238,7 @@ export default function LoginScreen() {
 
                 {/* Login Button */}
                 <TouchableOpacity
+                  onPress={handleLogin}
                   style={{
                     backgroundColor: "#9A563A",
                     paddingVertical: 18,
@@ -265,7 +271,7 @@ export default function LoginScreen() {
                     marginTop: 24,
                   }}
                 >
-                  <Text style={{ color: "#9CA3AF", fontSize: 16 }}>Don't have an account? </Text>
+                  <Text style={{ color: "#9CA3AF", fontSize: 13 }}>Don't have an account? </Text>
                   <TouchableOpacity onPress={() => router.push("/(auth)/register")}>
                     <Text
                       style={{
