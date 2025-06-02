@@ -2,16 +2,16 @@ import { Feather, FontAwesome } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
 import { useState } from "react"
 import {
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
@@ -34,7 +34,54 @@ export default function RegisterScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 40, backgroundColor: "#FAFAFA" }}>
+      <View style={{ flex: 1, paddingHorizontal: 24, paddingTop: 40, backgroundColor: "#FEF7ED" }}>
+        {/* Background decorative patches - matching the exact image */}
+
+        {/* Top right large patch */}
+        <View
+          style={{
+            position: "absolute",
+            top: 50,
+            right: -80,
+            width: 280,
+            height: 350,
+            backgroundColor: "#F5E6D3",
+            borderRadius: 200,
+            opacity: 0.4,
+            transform: [{ rotate: "15deg" }],
+          }}
+        />
+
+        {/* Bottom left large patch */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: -100,
+            left: -120,
+            width: 320,
+            height: 400,
+            backgroundColor: "#E8D5C4",
+            borderRadius: 200,
+            opacity: 0.3,
+            transform: [{ rotate: "-20deg" }],
+          }}
+        />
+
+        {/* Small patch on the right side */}
+        <View
+          style={{
+            position: "absolute",
+            top: 250,
+            right: -30,
+            width: 120,
+            height: 180,
+            backgroundColor: "#F0E6D2",
+            borderRadius: 80,
+            opacity: 0.25,
+            transform: [{ rotate: "25deg" }],
+          }}
+        />
+
         <SafeAreaProvider>
           <SafeAreaView style={{ flex: 1, justifyContent: "center", paddingHorizontal: 24, paddingTop: 40 }}>
             <KeyboardAvoidingView
@@ -59,24 +106,24 @@ export default function RegisterScreen() {
                 {/* Header text */}
                 <Text
                   style={{
-                    fontSize: 22,
+                    fontSize: 24,
                     fontWeight: "bold",
                     color: "black",
                     marginTop: -10,
                     textAlign: "center",
                   }}
                 >
-                  Join Our Practice
+                  Registration Account
                 </Text>
                 <Text
                   style={{
-                    fontSize: 13,
+                    fontSize: 14,
                     color: "#6B7280",
-                    marginBottom: 24,
+                    marginBottom: 32,
                     textAlign: "center",
                   }}
                 >
-                  Create your therapist account to get started
+                  Let's create your account first
                 </Text>
 
                 {/* Full Name Input */}
@@ -90,28 +137,32 @@ export default function RegisterScreen() {
                     padding: 16,
                     paddingVertical: 20,
                     borderWidth: 1,
-                    borderColor: fullNameFocus ? "#9A563A" : "#DFDFDF",
+                    borderColor: fullNameFocus ? "#9A563A" : "#E5E7EB",
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 2,
+                    elevation: 1,
                   }}
                 >
                   <FontAwesome
-                    name="user-md"
-                    size={20}
-                    color={fullNameFocus ? "#9A563A" : "#DFDFDF"}
+                    name="user"
+                    size={18}
+                    color={fullNameFocus ? "#9A563A" : "#9CA3AF"}
                     style={{ marginRight: 12 }}
                   />
                   <TextInput
-                    placeholder="Full Name (Dr./Therapist)"
+                    placeholder="Full Name"
                     style={{
                       flex: 1,
                       color: "black",
-                      marginBottom: 2,
+                      fontSize: 16,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
-                      paddingBottom: Platform.OS === "ios" ? 2 : 2,
                     }}
                     onFocus={() => setFullNameFocus(true)}
                     onBlur={() => setFullNameFocus(false)}
-                    placeholderTextColor="gray"
+                    placeholderTextColor="#9CA3AF"
                     value={fullName}
                     onChangeText={setFullName}
                     autoCapitalize="words"
@@ -130,72 +181,36 @@ export default function RegisterScreen() {
                     padding: 16,
                     paddingVertical: 20,
                     borderWidth: 1,
-                    borderColor: emailFocus ? "#9A563A" : "#DFDFDF",
+                    borderColor: emailFocus ? "#9A563A" : "#E5E7EB",
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 2,
+                    elevation: 1,
                   }}
                 >
                   <FontAwesome
                     name="envelope"
-                    size={20}
-                    color={emailFocus ? "#9A563A" : "#DFDFDF"}
+                    size={18}
+                    color={emailFocus ? "#9A563A" : "#9CA3AF"}
                     style={{ marginRight: 12 }}
                   />
                   <TextInput
-                    placeholder="Professional Email"
+                    placeholder="Email"
                     keyboardType="email-address"
                     style={{
                       flex: 1,
                       color: "black",
-                      marginBottom: 2,
+                      fontSize: 16,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
-                      paddingBottom: Platform.OS === "ios" ? 2 : 2,
                     }}
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
-                    placeholderTextColor="gray"
+                    placeholderTextColor="#9CA3AF"
                     value={email}
                     onChangeText={setEmail}
                     autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                </View>
-
-                {/* Specialization Input */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    backgroundColor: "#FFFFFF",
-                    marginBottom: 16,
-                    borderRadius: 14,
-                    padding: 16,
-                    paddingVertical: 20,
-                    borderWidth: 1,
-                    borderColor: specializationFocus ? "#9A563A" : "#DFDFDF",
-                  }}
-                >
-                  <FontAwesome
-                    name="stethoscope"
-                    size={20}
-                    color={specializationFocus ? "#9A563A" : "#DFDFDF"}
-                    style={{ marginRight: 12 }}
-                  />
-                  <TextInput
-                    placeholder="Specialization (e.g., Ayurveda, Massage, etc.)"
-                    style={{
-                      flex: 1,
-                      color: "black",
-                      marginBottom: 2,
-                      height: Platform.OS === "ios" ? 24 : "auto",
-                      paddingVertical: Platform.OS === "ios" ? 0 : 2,
-                      paddingBottom: Platform.OS === "ios" ? 2 : 2,
-                    }}
-                    onFocus={() => setSpecializationFocus(true)}
-                    onBlur={() => setSpecializationFocus(false)}
-                    placeholderTextColor="gray"
-                    value={specialization}
-                    onChangeText={setSpecialization}
-                    autoCapitalize="words"
                     autoCorrect={false}
                   />
                 </View>
@@ -211,13 +226,18 @@ export default function RegisterScreen() {
                     padding: 16,
                     paddingVertical: 20,
                     borderWidth: 1,
-                    borderColor: passwordFocus ? "#9A563A" : "#DFDFDF",
+                    borderColor: passwordFocus ? "#9A563A" : "#E5E7EB",
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 2,
+                    elevation: 1,
                   }}
                 >
                   <FontAwesome
                     name="key"
-                    size={20}
-                    color={passwordFocus ? "#9A563A" : "#DFDFDF"}
+                    size={18}
+                    color={passwordFocus ? "#9A563A" : "#9CA3AF"}
                     style={{ marginRight: 12 }}
                   />
                   <TextInput
@@ -226,14 +246,13 @@ export default function RegisterScreen() {
                     style={{
                       flex: 1,
                       color: "black",
-                      marginBottom: 2,
+                      fontSize: 16,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
-                      paddingBottom: Platform.OS === "ios" ? 2 : 2,
                     }}
                     onFocus={() => setPasswordFocus(true)}
                     onBlur={() => setPasswordFocus(false)}
-                    placeholderTextColor="gray"
+                    placeholderTextColor="#9CA3AF"
                     value={password}
                     onChangeText={setPassword}
                   />
@@ -241,7 +260,7 @@ export default function RegisterScreen() {
                     <Feather
                       name={showPassword ? "eye" : "eye-off"}
                       size={20}
-                      color={showPassword ? "#9A563A" : "gray"}
+                      color={showPassword ? "#9A563A" : "#9CA3AF"}
                     />
                   </TouchableOpacity>
                 </View>
@@ -252,34 +271,38 @@ export default function RegisterScreen() {
                     flexDirection: "row",
                     alignItems: "center",
                     backgroundColor: "#FFFFFF",
-                    marginBottom: 24,
+                    marginBottom: 32,
                     borderRadius: 14,
                     padding: 16,
                     paddingVertical: 20,
                     borderWidth: 1,
-                    borderColor: confirmPasswordFocus ? "#9A563A" : "#DFDFDF",
+                    borderColor: confirmPasswordFocus ? "#9A563A" : "#E5E7EB",
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 2,
+                    elevation: 1,
                   }}
                 >
                   <FontAwesome
-                    name="lock"
-                    size={20}
-                    color={confirmPasswordFocus ? "#9A563A" : "#DFDFDF"}
+                    name="key"
+                    size={18}
+                    color={confirmPasswordFocus ? "#9A563A" : "#9CA3AF"}
                     style={{ marginRight: 12 }}
                   />
                   <TextInput
-                    placeholder="Confirm Password"
+                    placeholder="Confirm password"
                     secureTextEntry={!showConfirmPassword}
                     style={{
                       flex: 1,
                       color: "black",
-                      marginBottom: 2,
+                      fontSize: 16,
                       height: Platform.OS === "ios" ? 24 : "auto",
                       paddingVertical: Platform.OS === "ios" ? 0 : 2,
-                      paddingBottom: Platform.OS === "ios" ? 2 : 2,
                     }}
                     onFocus={() => setConfirmPasswordFocus(true)}
                     onBlur={() => setConfirmPasswordFocus(false)}
-                    placeholderTextColor="gray"
+                    placeholderTextColor="#9CA3AF"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                   />
@@ -287,7 +310,7 @@ export default function RegisterScreen() {
                     <Feather
                       name={showConfirmPassword ? "eye" : "eye-off"}
                       size={20}
-                      color={showConfirmPassword ? "#9A563A" : "gray"}
+                      color={showConfirmPassword ? "#9A563A" : "#9CA3AF"}
                     />
                   </TouchableOpacity>
                 </View>
@@ -296,9 +319,14 @@ export default function RegisterScreen() {
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#9A563A",
-                    paddingVertical: 20,
+                    paddingVertical: 18,
                     alignItems: "center",
                     borderRadius: 14,
+                    shadowColor: "#9A563A",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 8,
+                    elevation: 8,
                   }}
                 >
                   <Text
@@ -308,7 +336,7 @@ export default function RegisterScreen() {
                       fontWeight: "600",
                     }}
                   >
-                    Join Practice
+                    Create Account
                   </Text>
                 </TouchableOpacity>
 
