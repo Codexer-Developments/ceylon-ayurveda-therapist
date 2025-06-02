@@ -15,8 +15,59 @@ export default function ProfileScreen() {
     router.replace("/(auth)/login");
   };
 
+  const handleAccountSecurity = () => {
+    router.push("/(screens)/account-security");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FEF7ED" }}>
+      {/* Background decorative patches - matching the login screen */}
+
+      {/* Top right large patch */}
+      <View
+        style={{
+          position: "absolute",
+          top: 50,
+          right: -80,
+          width: 280,
+          height: 350,
+          backgroundColor: "#F5E6D3",
+          borderRadius: 200,
+          opacity: 0.4,
+          transform: [{ rotate: "15deg" }],
+        }}
+      />
+
+      {/* Bottom left large patch */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: -100,
+          left: -120,
+          width: 320,
+          height: 400,
+          backgroundColor: "#E8D5C4",
+          borderRadius: 200,
+          opacity: 0.3,
+          transform: [{ rotate: "-20deg" }],
+        }}
+      />
+
+      {/* Small patch on the right side */}
+      <View
+        style={{
+          position: "absolute",
+          top: 250,
+          right: -30,
+          width: 120,
+          height: 180,
+          backgroundColor: "#F0E6D2",
+          borderRadius: 80,
+          opacity: 0.25,
+          transform: [{ rotate: "25deg" }],
+        }}
+      />
+
       <ScrollView
         style={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
@@ -191,6 +242,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={handleAccountSecurity}
             style={{
               flexDirection: "row",
               alignItems: "center",
