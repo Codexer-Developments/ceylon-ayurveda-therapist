@@ -19,6 +19,10 @@ export default function ProfileScreen() {
     router.push("/(screens)/account-security");
   };
 
+  const handleEditProfile = () => {
+    router.push("/(screens)/edit-profile");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FEF7ED" }}>
       {/* Background decorative patches - matching the login screen */}
@@ -99,14 +103,14 @@ export default function ProfileScreen() {
           {/* Professional Badge */}
           <View
             style={{
-              backgroundColor: "#7A4530",
+              backgroundColor: "#6B7280",
               paddingHorizontal: 16,
               paddingVertical: 6,
               borderRadius: 20,
               marginBottom: 16,
             }}
           >
-            <Text style={{ color: "white", fontSize: 12, fontWeight: "700" }}>
+            <Text style={{ color: "white", fontSize: 12, fontWeight: "500" }}>
               Licensed Therapist
             </Text>
           </View>
@@ -128,6 +132,7 @@ export default function ProfileScreen() {
 
           {/* Edit Profile Button */}
           <TouchableOpacity
+            onPress={handleEditProfile}
             style={{
               borderWidth: 1,
               borderColor: "#E5E7EB",
