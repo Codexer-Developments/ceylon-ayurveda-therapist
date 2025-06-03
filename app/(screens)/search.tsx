@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   Text,
@@ -12,6 +13,7 @@ import {
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocus, setSearchFocus] = useState(false);
+  const [showAllServices, setShowAllServices] = useState(false);
 
   // Mock data for patients (from AppointmentsScreen)
   const patients = [
@@ -101,7 +103,99 @@ export default function SearchScreen() {
     },
   ];
 
-  // Filter patients and treatments based on search query
+  // Mock data for services (from CalendarScreen's bookedServices)
+  const services = [
+    {
+      id: 1,
+      title: "Abhyanga Full Body",
+      description: "Traditional herbal oil massage",
+      price: "£60.00",
+      duration: "30 min",
+      image: require("../../assets/images/services/abhyanga.png"),
+    },
+    {
+      id: 2,
+      title: "Shiro Abhyanga",
+      description: "Soothe tension and clear",
+      price: "£50.00",
+      duration: "45 min",
+      image: require("../../assets/images/services/shiro.png"),
+    },
+    {
+      id: 3,
+      title: "Deep Tissue Massage",
+      description: "Relieve chronic tension",
+      price: "£55.00",
+      duration: "60 min",
+      image: require("../../assets/images/services/deeptissue.png"),
+    },
+    {
+      id: 4,
+      title: "Relaxing Full Body",
+      description: "Unwind your body and mind",
+      price: "£50.00",
+      duration: "45 min",
+      image: require("../../assets/images/services/relax-fullbody.png"),
+    },
+    {
+      id: 5,
+      title: "Reflexology Foot",
+      description: "Balance your body by treating feet",
+      price: "£45.00",
+      duration: "45 min",
+      image: require("../../assets/images/services/reflexology.png"),
+    },
+    {
+      id: 6,
+      title: "Nabhi Abhyanga",
+      description: "Ceylon Ayurvedic Abdominal",
+      price: "£40.00",
+      duration: "30 min",
+      image: require("../../assets/images/services/nabhi.png"),
+    },
+    {
+      id: 7,
+      title: "Ayurvedic Herbal Facial",
+      description: "Natural glow with herbal ingredients",
+      price: "£45.00",
+      duration: "45 min",
+      image: require("../../assets/images/services/herbal-facial.png"),
+    },
+    {
+      id: 8,
+      title: "Hair & Scalp Treatment",
+      description: "Nourish your scalp and promote hair health",
+      price: "£35.00",
+      duration: "40 min",
+      image: require("../../assets/images/services/hair-scalp.png"),
+    },
+    {
+      id: 9,
+      title: "Herbal Face Pack",
+      description: "Natural herbal blend to cleanse",
+      price: "£25.00",
+      duration: "30 min",
+      image: require("../../assets/images/services/herbal-facepack.png"),
+    },
+    {
+      id: 10,
+      title: "Full Body Ubtan",
+      description: "Traditional Ayurvedic body treatment",
+      price: "£55.00",
+      duration: "60 min",
+      image: require("../../assets/images/services/fullbody-ubtan.png"),
+    },
+    {
+      id: 11,
+      title: "Panchakarma Detox",
+      description: "Complete body detoxification",
+      price: "£120.00",
+      duration: "90 min",
+      image: require("../../assets/images/services/panchakarma.png"),
+    },
+  ];
+
+  // Filter patients, treatments, and services based on search query
   const filteredPatients = patients.filter(
     (patient) =>
       patient.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -113,6 +207,17 @@ export default function SearchScreen() {
       treatment.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       treatment.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const filteredServices = services.filter(
+    (service) =>
+      service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Show only first 4 services unless showAllServices is true
+  const displayedServices = showAllServices
+    ? filteredServices
+    : filteredServices.slice(0, 4);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FEF7ED" }}>
@@ -198,7 +303,7 @@ export default function SearchScreen() {
           >
             <FontAwesome name="search" size={20} color="#9CA3AF" />
             <TextInput
-              placeholder="Search patients or treatments..."
+              placeholder="Search patients, treatments, or services..."
               style={{
                 flex: 1,
                 color: "#374151",
@@ -454,6 +559,170 @@ export default function SearchScreen() {
                 }}
               >
                 No treatments found
+              </Text>
+            </View>
+          )}
+        </View>
+
+        {/* Services Section */}
+        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: "#374151",
+              marginBottom: 16,
+            }}
+          >
+            Services ({filteredServices.length})
+          </Text>
+
+          {filteredServices.length > 0 ? (
+            <View>
+              {displayedServices.map((service) => (
+                <View
+                  key={service.id}
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 12,
+                    marginBottom: 12,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 3,
+                    borderWidth: 2,
+                    borderColor: "#9A563A",
+                  }}
+                >
+                  <Image
+                    source={
+                      typeof service.image === "string"
+                        ? { uri: service.image }
+                        : service.image
+                    }
+                    style={{
+                      width: "100%",
+                      height: 100,
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
+                      backgroundColor: "#F3F4F6",
+                    }}
+                    resizeMode="cover"
+                  />
+                  <View style={{ padding: 12 }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        color: "#374151",
+                        marginBottom: 4,
+                      }}
+                      numberOfLines={1}
+                    >
+                      {service.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#6B7280",
+                        marginBottom: 8,
+                      }}
+                      numberOfLines={1}
+                    >
+                      {service.description}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "bold",
+                          color: "#9A563A",
+                        }}
+                      >
+                        {service.price}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <FontAwesome name="clock-o" size={12} color="#6B7280" />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "#6B7280",
+                            marginLeft: 4,
+                          }}
+                        >
+                          {service.duration}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              ))}
+              {filteredServices.length > 4 && !showAllServices && (
+                <TouchableOpacity
+                  onPress={() => setShowAllServices(true)}
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: 12,
+                    paddingVertical: 12,
+                    alignItems: "center",
+                    marginTop: 8,
+                    borderWidth: 1,
+                    borderColor: "#9A563A",
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 3,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#9A563A",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  >
+                    See More
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : (
+            <View
+              style={{
+                backgroundColor: "white",
+                borderRadius: 12,
+                padding: 24,
+                alignItems: "center",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
+            >
+              <FontAwesome name="medkit" size={48} color="#D1D5DB" />
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#6B7280",
+                  marginTop: 12,
+                  textAlign: "center",
+                }}
+              >
+                No services found
               </Text>
             </View>
           )}
