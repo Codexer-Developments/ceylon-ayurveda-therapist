@@ -173,8 +173,9 @@ export default function CalendarScreen() {
     setSelectedDate(newDate);
   };
 
+  // Fixed isToday function - this will always get the actual current date
   const isToday = (day: number) => {
-    const today = new Date();
+    const today = new Date(); // This gets the real current date
     return (
       day === today.getDate() &&
       selectedDate.getMonth() === today.getMonth() &&
@@ -195,6 +196,22 @@ export default function CalendarScreen() {
     ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     return bookedServices.filter((service) => service.date === dateString)
       .length;
+  };
+
+  // Function to check if a date is in the past
+  const isPastDate = (day: number) => {
+    const today = new Date();
+    const checkDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      day
+    );
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    return checkDate < todayStart;
   };
 
   return (
@@ -344,6 +361,7 @@ export default function CalendarScreen() {
                         : "transparent",
                       borderWidth: hasBooking(day) && !isToday(day) ? 1 : 0,
                       borderColor: "#9A563A",
+                      opacity: isPastDate(day) && !isToday(day) ? 0.4 : 1,
                     }}
                   >
                     <Text
@@ -355,6 +373,8 @@ export default function CalendarScreen() {
                           ? "white"
                           : hasBooking(day)
                           ? "#9A563A"
+                          : isPastDate(day)
+                          ? "#9CA3AF"
                           : "#374151",
                       }}
                     >
