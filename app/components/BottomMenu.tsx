@@ -17,7 +17,7 @@ export default function BottomMenu() {
 
   // Navigation items with FontAwesome icons
   const navItems = [
-    { name: "appointments", label: "Home", icon: "home" },
+    { name: "appointments", label: "Sessions", icon: "plus" },
     { name: "calendar", label: "Bookings", icon: "calendar" },
     { name: "search", label: "Search", icon: "search" },
     { name: "profile", label: "Profile Info", icon: "user" },
