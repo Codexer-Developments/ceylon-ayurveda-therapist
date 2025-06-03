@@ -11,6 +11,7 @@ import {
 
 export default function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate()); // Track selected day
 
   // Expanded mock data for booked services
   const bookedServices = [
@@ -171,6 +172,8 @@ export default function CalendarScreen() {
     const newDate = new Date(selectedDate);
     newDate.setMonth(selectedDate.getMonth() + direction);
     setSelectedDate(newDate);
+    // Reset selected day to 1 when changing months
+    setSelectedDay(1);
   };
 
   // Fixed isToday function - this will always get the actual current date
@@ -213,6 +216,37 @@ export default function CalendarScreen() {
     );
     return checkDate < todayStart;
   };
+
+  // Function to handle day selection
+  const handleDayPress = (day: number) => {
+    setSelectedDay(day);
+  };
+
+  // Function to get sessions for selected day
+  const getSelectedDaySessions = () => {
+    const dateString = `${selectedDate.getFullYear()}-${String(
+      selectedDate.getMonth() + 1
+    ).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+    return bookedServices.filter((service) => service.date === dateString);
+  };
+
+  // Function to get the section title based on selected day
+  const getSelectedDayTitle = () => {
+    const today = new Date();
+    if (
+      selectedDay === today.getDate() &&
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
+    ) {
+      return "Today's Sessions";
+    } else {
+      return `Sessions on ${selectedDay} ${
+        monthNames[selectedDate.getMonth()]
+      }`;
+    }
+  };
+
+  const selectedDaySessions = getSelectedDaySessions();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FEF7ED" }}>
@@ -349,6 +383,7 @@ export default function CalendarScreen() {
               >
                 {day && (
                   <TouchableOpacity
+                    onPress={() => handleDayPress(day)}
                     style={{
                       flex: 1,
                       justifyContent: "center",
@@ -356,10 +391,15 @@ export default function CalendarScreen() {
                       borderRadius: 8,
                       backgroundColor: isToday(day)
                         ? "#9A563A"
+                        : selectedDay === day
+                        ? "#F0E6D2"
                         : hasBooking(day)
                         ? "#FEF7ED"
                         : "transparent",
-                      borderWidth: hasBooking(day) && !isToday(day) ? 1 : 0,
+                      borderWidth:
+                        hasBooking(day) && !isToday(day) && selectedDay !== day
+                          ? 1
+                          : 0,
                       borderColor: "#9A563A",
                       opacity: isPastDate(day) && !isToday(day) ? 0.4 : 1,
                     }}
@@ -368,9 +408,13 @@ export default function CalendarScreen() {
                       style={{
                         fontSize: 14,
                         fontWeight:
-                          isToday(day) || hasBooking(day) ? "600" : "400",
+                          isToday(day) || hasBooking(day) || selectedDay === day
+                            ? "600"
+                            : "400",
                         color: isToday(day)
                           ? "white"
+                          : selectedDay === day
+                          ? "#9A563A"
                           : hasBooking(day)
                           ? "#9A563A"
                           : isPastDate(day)
@@ -380,17 +424,19 @@ export default function CalendarScreen() {
                     >
                       {day}
                     </Text>
-                    {hasBooking(day) && !isToday(day) && (
-                      <View
-                        style={{
-                          width: 4,
-                          height: 4,
-                          borderRadius: 2,
-                          backgroundColor: "#9A563A",
-                          marginTop: 2,
-                        }}
-                      />
-                    )}
+                    {hasBooking(day) &&
+                      !isToday(day) &&
+                      selectedDay !== day && (
+                        <View
+                          style={{
+                            width: 4,
+                            height: 4,
+                            borderRadius: 2,
+                            backgroundColor: "#9A563A",
+                            marginTop: 2,
+                          }}
+                        />
+                      )}
                     {hasBooking(day) && getBookingsCount(day) > 1 && (
                       <Text
                         style={{
@@ -412,7 +458,183 @@ export default function CalendarScreen() {
           </View>
         </View>
 
-        {/* Booked Services Section */}
+        {/* Selected Day Sessions Section */}
+        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: "#374151",
+              marginBottom: 16,
+            }}
+          >
+            {getSelectedDayTitle()} ({selectedDaySessions.length})
+          </Text>
+
+          {selectedDaySessions.length > 0 ? (
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+              }}
+            >
+              {selectedDaySessions.map((service) => (
+                <View
+                  key={service.id}
+                  style={{
+                    width: "48%",
+                    backgroundColor: "white",
+                    borderRadius: 12,
+                    marginBottom: 16,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 3,
+                    borderWidth: 2,
+                    borderColor: "#9A563A",
+                  }}
+                >
+                  {/* Service Image */}
+                  <Image
+                    source={
+                      typeof service.image === "string"
+                        ? { uri: service.image }
+                        : service.image
+                    }
+                    style={{
+                      width: "100%",
+                      height: 100,
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
+                      backgroundColor: "#F3F4F6",
+                    }}
+                    resizeMode="cover"
+                  />
+
+                  {/* Service Details */}
+                  <View style={{ padding: 12 }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "bold",
+                        color: "#374151",
+                        marginBottom: 4,
+                      }}
+                      numberOfLines={1}
+                    >
+                      {service.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#6B7280",
+                        marginBottom: 8,
+                      }}
+                      numberOfLines={1}
+                    >
+                      {service.description}
+                    </Text>
+
+                    {/* Date and Time */}
+                    <View style={{ marginBottom: 8 }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: "#9A563A",
+                          fontWeight: "500",
+                        }}
+                      >
+                        {service.date} • {service.time}
+                      </Text>
+                    </View>
+
+                    {/* Price and Duration */}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "bold",
+                          color: "#9A563A",
+                        }}
+                      >
+                        {service.price}
+                      </Text>
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <FontAwesome name="clock-o" size={12} color="#6B7280" />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "#6B7280",
+                            marginLeft: 4,
+                          }}
+                        >
+                          {service.duration}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View
+              style={{
+                backgroundColor: "white",
+                borderRadius: 12,
+                padding: 24,
+                alignItems: "center",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
+            >
+              <FontAwesome name="calendar-o" size={48} color="#D1D5DB" />
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#6B7280",
+                  marginTop: 12,
+                  textAlign: "center",
+                }}
+              >
+                No sessions scheduled for this day
+              </Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#9A563A",
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  marginTop: 16,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 14,
+                    fontWeight: "600",
+                  }}
+                >
+                  Book Session
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        {/* Upcoming Sessions Section */}
         <View style={{ paddingHorizontal: 24 }}>
           <Text
             style={{
@@ -422,7 +644,7 @@ export default function CalendarScreen() {
               marginBottom: 16,
             }}
           >
-            Upcoming Sessions ({bookedServices.length})
+            All Upcoming Sessions ({bookedServices.length})
           </Text>
 
           {/* Service Cards */}
