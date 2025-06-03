@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 import {
+  Animated,
   Image,
   SafeAreaView,
   ScrollView,
@@ -14,6 +15,18 @@ export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocus, setSearchFocus] = useState(false);
   const [showAllServices, setShowAllServices] = useState(false);
+  const [activeTab, setActiveTab] = useState("Patients");
+  const [searchBarScale] = useState(new Animated.Value(1));
+
+  // Animate search bar on focus
+  const animateSearchBar = (focused: boolean) => {
+    Animated.spring(searchBarScale, {
+      toValue: focused ? 1.02 : 1,
+      friction: 8,
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+  };
 
   // Mock data for patients (from AppointmentsScreen)
   const patients = [
@@ -219,6 +232,425 @@ export default function SearchScreen() {
     ? filteredServices
     : filteredServices.slice(0, 4);
 
+  const tabs = ["Patients", "Treatments", "Services"];
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "Patients":
+        return (
+          <View style={{ marginBottom: 24 }}>
+            {filteredPatients.length > 0 ? (
+              <View>
+                {filteredPatients.map((patient) => (
+                  <TouchableOpacity
+                    key={patient.id}
+                    activeOpacity={0.8}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 12,
+                      marginBottom: 12,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      elevation: 3,
+                      borderWidth: 2,
+                      borderColor: "#9A563A",
+                      transform: [{ scale: 1 }],
+                    }}
+                    onPressIn={() => ({ transform: [{ scale: 0.98 }] })}
+                    onPressOut={() => ({ transform: [{ scale: 1 }] })}
+                  >
+                    <View style={{ padding: 12 }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "#374151",
+                          marginBottom: 4,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {patient.patientName}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "#6B7280",
+                          marginBottom: 8,
+                        }}
+                      >
+                        Age: {patient.age}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "#6B7280",
+                          marginBottom: 8,
+                        }}
+                        numberOfLines={1}
+                      >
+                        Session: {patient.session}
+                      </Text>
+                      <View style={{ marginBottom: 8 }}>
+                        <Text
+                          style={{
+                            fontSize: 11,
+                            color: "#9A563A",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {patient.date} • {patient.time}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <FontAwesome name="clock-o" size={12} color="#6B7280" />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "#6B7280",
+                            marginLeft: 4,
+                          }}
+                        >
+                          {patient.duration}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: 12,
+                  padding: 24,
+                  alignItems: "center",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <FontAwesome name="user-o" size={48} color="#D1D5DB" />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: "#6B7280",
+                    marginTop: 12,
+                    textAlign: "center",
+                  }}
+                >
+                  No patients found
+                </Text>
+              </View>
+            )}
+          </View>
+        );
+      case "Treatments":
+        return (
+          <View style={{ marginBottom: 24 }}>
+            {filteredTreatments.length > 0 ? (
+              <View>
+                {filteredTreatments.map((treatment) => (
+                  <TouchableOpacity
+                    key={treatment.id}
+                    activeOpacity={0.8}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 12,
+                      marginBottom: 12,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      elevation: 3,
+                      borderWidth: 2,
+                      borderColor: "#9A563A",
+                    }}
+                    onPressIn={() => ({ transform: [{ scale: 0.98 }] })}
+                    onPressOut={() => ({ transform: [{ scale: 1 }] })}
+                  >
+                    <View style={{ padding: 12 }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "#374151",
+                          marginBottom: 4,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {treatment.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "#6B7280",
+                          marginBottom: 8,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {treatment.description}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "bold",
+                            color: "#9A563A",
+                          }}
+                        >
+                          {treatment.price}
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FontAwesome
+                            name="clock-o"
+                            size={12}
+                            color="#6B7280"
+                          />
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: "#6B7280",
+                              marginLeft: 4,
+                            }}
+                          >
+                            {treatment.duration}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: 12,
+                  padding: 24,
+                  alignItems: "center",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <FontAwesome name="medkit" size={48} color="#D1D5DB" />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: "#6B7280",
+                    marginTop: 12,
+                    textAlign: "center",
+                  }}
+                >
+                  No treatments found
+                </Text>
+              </View>
+            )}
+          </View>
+        );
+      case "Services":
+        return (
+          <View style={{ marginBottom: 24 }}>
+            {filteredServices.length > 0 ? (
+              <View>
+                {displayedServices.map((service) => (
+                  <TouchableOpacity
+                    key={service.id}
+                    activeOpacity={0.8}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 12,
+                      marginBottom: 12,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      elevation: 3,
+                      borderWidth: 2,
+                      borderColor: "#9A563A",
+                    }}
+                    onPressIn={() => ({ transform: [{ scale: 0.98 }] })}
+                    onPressOut={() => ({ transform: [{ scale: 1 }] })}
+                  >
+                    <Image
+                      source={
+                        typeof service.image === "string"
+                          ? { uri: service.image }
+                          : service.image
+                      }
+                      style={{
+                        width: "100%",
+                        height: 100,
+                        borderTopLeftRadius: 10,
+                        borderTopRightRadius: 10,
+                        backgroundColor: "#F3F4F6",
+                      }}
+                      resizeMode="cover"
+                    />
+                    <View style={{ padding: 12 }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "#374151",
+                          marginBottom: 4,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {service.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "#6B7280",
+                          marginBottom: 8,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {service.description}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "bold",
+                            color: "#9A563A",
+                          }}
+                        >
+                          {service.price}
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FontAwesome
+                            name="clock-o"
+                            size={12}
+                            color="#6B7280"
+                          />
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: "#6B7280",
+                              marginLeft: 4,
+                            }}
+                          >
+                            {service.duration}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+                {filteredServices.length > 4 && !showAllServices && (
+                  <TouchableOpacity
+                    onPress={() => setShowAllServices(true)}
+                    style={{
+                      backgroundColor: "#9A563A",
+                      borderRadius: 10,
+                      marginLeft: 105,
+                      justifyContent: "center",
+                      width: 130,
+                      height: 30,
+                      alignItems: "center",
+                      marginTop: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      elevation: 3,
+                    }}
+                  >
+                    <Animated.View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        transform: [{ scale: searchBarScale }],
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "white",
+                          fontSize: 14,
+                          fontWeight: "600",
+                          marginRight: 6,
+                        }}
+                      >
+                        See More
+                      </Text>
+                      <FontAwesome
+                        name="chevron-down"
+                        size={12}
+                        color="white"
+                      />
+                    </Animated.View>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: 12,
+                  padding: 24,
+                  alignItems: "center",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <FontAwesome name="medkit" size={48} color="#D1D5DB" />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: "#6B7280",
+                    marginTop: 12,
+                    textAlign: "center",
+                  }}
+                >
+                  No services found
+                </Text>
+              </View>
+            )}
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FEF7ED" }}>
       {/* Background decorative patches */}
@@ -273,460 +705,106 @@ export default function SearchScreen() {
         >
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: "bold",
               color: "#9A563A",
               textAlign: "center",
+              textShadowColor: "rgba(0, 0, 0, 0.1)",
+              textShadowOffset: { width: 1, height: 1 },
+              textShadowRadius: 2,
             }}
           >
-            Search
+            Discover Wellness
           </Text>
         </View>
 
         {/* Search Bar */}
         <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
-          <View
+          <Animated.View
             style={{
+              transform: [{ scale: searchBarScale }],
               backgroundColor: "#FFFFFF",
-              borderRadius: 12,
+              borderRadius: 16,
               padding: 12,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: searchFocus ? "#9A563A" : "#E5E7EB",
               shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.2,
+              shadowRadius: 8,
+              elevation: 5,
               flexDirection: "row",
               alignItems: "center",
             }}
           >
-            <FontAwesome name="search" size={20} color="#9CA3AF" />
+            <FontAwesome
+              name="search"
+              size={22}
+              color={searchFocus ? "#9A563A" : "#9CA3AF"}
+            />
             <TextInput
               placeholder="Search patients, treatments, or services..."
               style={{
                 flex: 1,
                 color: "#374151",
                 fontSize: 16,
-                marginLeft: 8,
+                marginLeft: 12,
+                fontWeight: "500",
               }}
-              onFocus={() => setSearchFocus(true)}
-              onBlur={() => setSearchFocus(false)}
+              onFocus={() => {
+                setSearchFocus(true);
+                animateSearchBar(true);
+              }}
+              onBlur={() => {
+                setSearchFocus(false);
+                animateSearchBar(false);
+              }}
               placeholderTextColor="#9CA3AF"
               value={searchQuery}
               onChangeText={setSearchQuery}
               autoCapitalize="none"
               autoCorrect={false}
             />
-          </View>
+          </Animated.View>
         </View>
 
-        {/* Patients Section */}
-        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "#374151",
-              marginBottom: 16,
-            }}
-          >
-            Patients ({filteredPatients.length})
-          </Text>
-
-          {filteredPatients.length > 0 ? (
-            <View>
-              {filteredPatients.map((patient) => (
-                <View
-                  key={patient.id}
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 12,
-                    marginBottom: 12,
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                    elevation: 3,
-                    borderWidth: 2,
-                    borderColor: "#9A563A",
-                  }}
-                >
-                  <View style={{ padding: 12 }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        color: "#374151",
-                        marginBottom: 4,
-                      }}
-                      numberOfLines={1}
-                    >
-                      {patient.patientName}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#6B7280",
-                        marginBottom: 8,
-                      }}
-                    >
-                      Age: {patient.age}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#6B7280",
-                        marginBottom: 8,
-                      }}
-                      numberOfLines={1}
-                    >
-                      Session: {patient.session}
-                    </Text>
-                    <View style={{ marginBottom: 8 }}>
-                      <Text
-                        style={{
-                          fontSize: 11,
-                          color: "#9A563A",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {patient.date} • {patient.time}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <FontAwesome name="clock-o" size={12} color="#6B7280" />
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: "#6B7280",
-                          marginLeft: 4,
-                        }}
-                      >
-                        {patient.duration}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <View
+        {/* Tabs */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            paddingHorizontal: 24,
+            marginBottom: 16,
+          }}
+        >
+          {tabs.map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              onPress={() => setActiveTab(tab)}
               style={{
-                backgroundColor: "white",
-                borderRadius: 12,
-                padding: 24,
-                alignItems: "center",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 3,
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                borderRadius: 20,
+                backgroundColor: activeTab === tab ? "#9A563A" : "transparent",
+                borderWidth: activeTab === tab ? 0 : 1,
+                borderColor: "#9A563A",
               }}
             >
-              <FontAwesome name="user-o" size={48} color="#D1D5DB" />
               <Text
                 style={{
                   fontSize: 16,
-                  color: "#6B7280",
-                  marginTop: 12,
-                  textAlign: "center",
+                  fontWeight: "600",
+                  color: activeTab === tab ? "white" : "#374151",
                 }}
               >
-                No patients found
+                {tab}
               </Text>
-            </View>
-          )}
+            </TouchableOpacity>
+          ))}
         </View>
 
-        {/* Treatments Section */}
-        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "#374151",
-              marginBottom: 16,
-            }}
-          >
-            Treatments ({filteredTreatments.length})
-          </Text>
-
-          {filteredTreatments.length > 0 ? (
-            <View>
-              {filteredTreatments.map((treatment) => (
-                <View
-                  key={treatment.id}
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 12,
-                    marginBottom: 12,
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                    elevation: 3,
-                    borderWidth: 2,
-                    borderColor: "#9A563A",
-                  }}
-                >
-                  <View style={{ padding: 12 }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        color: "#374151",
-                        marginBottom: 4,
-                      }}
-                      numberOfLines={1}
-                    >
-                      {treatment.title}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#6B7280",
-                        marginBottom: 8,
-                      }}
-                      numberOfLines={1}
-                    >
-                      {treatment.description}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontWeight: "bold",
-                          color: "#9A563A",
-                        }}
-                      >
-                        {treatment.price}
-                      </Text>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <FontAwesome name="clock-o" size={12} color="#6B7280" />
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: "#6B7280",
-                            marginLeft: 4,
-                          }}
-                        >
-                          {treatment.duration}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <View
-              style={{
-                backgroundColor: "white",
-                borderRadius: 12,
-                padding: 24,
-                alignItems: "center",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 3,
-              }}
-            >
-              <FontAwesome name="medkit" size={48} color="#D1D5DB" />
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "#6B7280",
-                  marginTop: 12,
-                  textAlign: "center",
-                }}
-              >
-                No treatments found
-              </Text>
-            </View>
-          )}
-        </View>
-
-        {/* Services Section */}
-        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "#374151",
-              marginBottom: 16,
-            }}
-          >
-            Services ({filteredServices.length})
-          </Text>
-
-          {filteredServices.length > 0 ? (
-            <View>
-              {displayedServices.map((service) => (
-                <View
-                  key={service.id}
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 12,
-                    marginBottom: 12,
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                    elevation: 3,
-                    borderWidth: 2,
-                    borderColor: "#9A563A",
-                  }}
-                >
-                  <Image
-                    source={
-                      typeof service.image === "string"
-                        ? { uri: service.image }
-                        : service.image
-                    }
-                    style={{
-                      width: "100%",
-                      height: 100,
-                      borderTopLeftRadius: 10,
-                      borderTopRightRadius: 10,
-                      backgroundColor: "#F3F4F6",
-                    }}
-                    resizeMode="cover"
-                  />
-                  <View style={{ padding: 12 }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        color: "#374151",
-                        marginBottom: 4,
-                      }}
-                      numberOfLines={1}
-                    >
-                      {service.title}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#6B7280",
-                        marginBottom: 8,
-                      }}
-                      numberOfLines={1}
-                    >
-                      {service.description}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontWeight: "bold",
-                          color: "#9A563A",
-                        }}
-                      >
-                        {service.price}
-                      </Text>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <FontAwesome name="clock-o" size={12} color="#6B7280" />
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: "#6B7280",
-                            marginLeft: 4,
-                          }}
-                        >
-                          {service.duration}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              ))}
-              {filteredServices.length > 4 && !showAllServices && (
-                <TouchableOpacity
-                  onPress={() => setShowAllServices(true)}
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: 12,
-                    paddingVertical: 12,
-                    alignItems: "center",
-                    marginTop: 8,
-                    borderWidth: 1,
-                    borderColor: "#9A563A",
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                    elevation: 3,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#9A563A",
-                      fontSize: 16,
-                      fontWeight: "600",
-                    }}
-                  >
-                    See More
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ) : (
-            <View
-              style={{
-                backgroundColor: "white",
-                borderRadius: 12,
-                padding: 24,
-                alignItems: "center",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 3,
-              }}
-            >
-              <FontAwesome name="medkit" size={48} color="#D1D5DB" />
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "#6B7280",
-                  marginTop: 12,
-                  textAlign: "center",
-                }}
-              >
-                No services found
-              </Text>
-            </View>
-          )}
-        </View>
+        {/* Tab Content */}
+        <View style={{ paddingHorizontal: 24 }}>{renderTabContent()}</View>
 
         {/* Book New Session Button */}
         <View style={{ paddingHorizontal: 24 }}>
@@ -743,6 +821,7 @@ export default function SearchScreen() {
               shadowRadius: 8,
               elevation: 8,
             }}
+            activeOpacity={0.8}
           >
             <Text
               style={{
